@@ -36,7 +36,9 @@ public class PackageInfoCheck implements JavaFileScanner {
   @Override
   public void scanFile(JavaFileScannerContext context) {
     File parentFile = context.getFile().getParentFile();
-    if (!new File(parentFile, "package-info.java").isFile() && !directoriesWithoutPackageFile.contains(parentFile)) {
+    if (!new File(parentFile, "package-info.java").isFile()
+      && !directoriesWithoutPackageFile.contains(parentFile)
+      && !context.isTestFile()) {
       Path relativize = ((DefaultJavaFileScannerContext) context).getBaseDirectory().toPath().relativize(parentFile.toPath());
       context.addIssue(parentFile, PackageInfoCheck.this, -1, "Add a 'package-info.java' file to document the '" + relativize.toString() + "' package");
       directoriesWithoutPackageFile.add(parentFile);
